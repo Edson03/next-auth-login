@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signin, signIn } from 'next-auth/client'
+import { signIn } from 'next-auth/client'
 import Link from 'next/link'
 import {
     Flex,
@@ -25,10 +25,14 @@ import * as Yup from "yup";
 
 import { ViewIcon, ViewOffIcon, EmailIcon, LockIcon } from '@chakra-ui/icons'
 
+import { useRouter } from "next/router";
+
 const CFaRegEnvelope = chakra(EmailIcon);
 const CFaLock = chakra(LockIcon);
 
 const Login = ({ providers }: any) => {
+
+    const router = useRouter()
 
     const [showPassword, setShowPassword] = useState(false);
     const handleShowClick = () => setShowPassword(!showPassword);
@@ -53,31 +57,7 @@ const Login = ({ providers }: any) => {
     });
 
     const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
-    // interface SignInResponse {
-    //     /** The reason for why the login process has stopped */
-    //     error: string | null
-    //     /** @see https://developer.mozilla.org/en-US/docs/Web/API/Response/status */
-    //     status: number
-    //     /** @see https://developer.mozilla.org/en-US/docs/Web/API/Response/ok */
-    //     ok: boolean
-    // }
     const onSubmit = async (values: loginValues) => {
-        // const resp = await fetch('http://localhost:3000/api/users/login', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         email: email,
-        //         password: password
-        //     })
-        // });
-        // const json = await resp.json();
-        // sleep(300).then(async () => {
-        //     window.alert(JSON.stringify(values, null, 2));
-        //     let signin = await signIn("credentials", {redirect: false, email:values.email,password:values.password})
-        //     console.log(signin?.error)
-        // });
 
         let signin = await signIn("credentials", {redirect: false, callbackUrl: `${window.location.origin}/restrict`, email:values.email,password:values.password})
         if(signin?.error === 'CredentialsSignin' && signin?.status === 401){
@@ -85,14 +65,8 @@ const Login = ({ providers }: any) => {
             setLoginerror(true)
         }else{
             console.log(signin)
+            router.push('/restrict')
         }
-        // if (values.email === 'observatorioods@satc.edu.br' && values.password === '123456') {
-        //     Router.replace('/admin');
-        //     //setMessage(json);
-        // } else {
-        //     console.log('email ou senha incorretos')
-        //     setLoginerror(true)
-        // }
     };
 
     const [loginerror, setLoginerror] = useState(false)
@@ -109,7 +83,7 @@ const Login = ({ providers }: any) => {
     return (
         <Flex
             flexDirection="column"
-            width="100wh"
+            width="100%"
             height="auto"
             pt="25px"
             pb="25px"
@@ -150,8 +124,9 @@ const Login = ({ providers }: any) => {
                                             <InputLeftElement
                                                 id="leftIcon"
                                                 pointerEvents="none"
-                                                children={<CFaRegEnvelope color="gray.300" />}
-                                            />
+                                            >
+                                                <CFaRegEnvelope color="gray.300" />
+                                            </InputLeftElement>
                                             <Input
                                                 id="emailInput"
                                                 type="email"
@@ -170,8 +145,9 @@ const Login = ({ providers }: any) => {
                                             <InputLeftElement
                                                 pointerEvents="none"
                                                 color="gray.300"
-                                                children={<CFaLock color="gray.300" />}
-                                            />
+                                            >
+                                                <CFaLock color="gray.300" />
+                                            </InputLeftElement>
                                             <Input
                                                 id="passwordInput"
                                                 type={showPassword ? "text" : "password"}

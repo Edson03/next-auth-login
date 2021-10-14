@@ -1,11 +1,15 @@
 import Link from 'next/link'
 import { useState } from 'react'
-import { Box, Flex, Text, Select, Stack, Container, SimpleGrid } from "@chakra-ui/react"
+import { Box, Flex, Text, Spacer } from "@chakra-ui/react"
 import { CloseIcon, HamburgerIcon } from '@chakra-ui/icons'
-import { useRouter } from 'next/router'
+import {
+    signIn, 
+    signOut,
+    useSession
+} from 'next-auth/client'
+  
 
 const MenuItems = ({ children, isLast, to = '/' }: any) => {
-    //console.log(children)
     return (
       <Text
         mb={{ base: isLast ? 0 : 8, sm: 0 }}
@@ -24,26 +28,42 @@ const Navbar = (props: any) => {
     const [show, setShow] = useState(false);
     const toggleMenu = () => setShow(!show);
 
+    const [ session, loading ] = useSession()
+
     return (
-        <Flex w="100%" justify="center" bg="#02689D">
-            <Flex
+        <Flex w="100%" justify="center" bg="#02689D" position='absolute' left={0} top={0}>
+            <Box
                 as="nav"
-                align="center"
-                justify="space-between"
-                wrap="wrap"
-                w={['100%', '100%', '90%', '5xl']}
-                h="56px"
-                p={3}
+                role="contentinfo"
+                mx="auto"
+                maxW="7xl"
+                py="6"
                 bg="#02689D"
-                color="#fff"
-                {...props}
+                color="#FFF"
+                px={{
+                    base: '4',
+                    md: '8',
+                }}
             >
-                <Stack direction="row">
-                    {/* <Box position="relative">
-                        Menu
-                    </Box> */}
+            <Flex
+                // as="nav"
+                // align="center"
+                // justify="space-between"
+                // wrap="wrap"
+                // w={['100%', '100%', '90%', '5xl']}
+                // // h="56px"
+                // py="6"
+                // p={3}
+                // bg="#02689D"
+                // color="#fff"
+                // {...props}
+            >
+            
+                <Box>
                     <MenuItems to="/">Home</MenuItems>
-                </Stack>
+                </Box>
+
+                <Spacer />
 
                 <Box display={{ base: "block", md: "none" }} onClick={toggleMenu}>
                     {show ? <CloseIcon w={5} h={5} /> : <HamburgerIcon w={8} h={8} />}
@@ -61,10 +81,12 @@ const Navbar = (props: any) => {
                     >
                         <MenuItems to="/norestrict">No restrict</MenuItems>
                         <MenuItems to="/restrict">Restrict</MenuItems>
-                        <MenuItems to="/login">Login</MenuItems>
+                        {!session && <MenuItems to="/login">Login</MenuItems>}
+                        {session && <Box as='a' textDecoration='underline' cursor='pointer' onClick={() => signOut()}>Logout</Box>}
                     </Flex>
                 </Box>
             </Flex>
+            </Box>
         </Flex>
     )
 }

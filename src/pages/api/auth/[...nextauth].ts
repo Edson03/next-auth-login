@@ -27,9 +27,9 @@ export default NextAuth({
                 console.log('inside authorize: req')
                 console.log(req.body)
               // Add logic here to look up the user from the credentials supplied
-              const user = { id: 1, name: 'J Smith', email: 'jsmith@example.com' }
+              const user = { id: 1, name: 'Edson Mateus', email: 'edsonmateusmc@gmail.com' }
         
-              if (credentials.email === 'edson.cruz@satc.edu.br') {
+              if (credentials.email === 'edsonmateusmc@gmail.com' && credentials.password === '123456') {
                 // Any object returned will be saved in `user` property of the JWT
                 return user
               } else {
@@ -66,7 +66,7 @@ export default NextAuth({
     jwt: {
         // A secret to use for key generation - you should set this explicitly
         // Defaults to NextAuth.js secret if not explicitly specified.
-        secret: 'INp8IvdIyeMcoGAgFGoA61DdBglwwSqnXJZkgz8PSnw',    
+        secret: process.env.SECRECT_JWT,    
     }
     
 })

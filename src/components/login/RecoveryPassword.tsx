@@ -62,17 +62,6 @@ const RecoveryPassword = () => {
     const sleep = (ms: any) => new Promise((resolve) => setTimeout(resolve, ms));
 
     const onSubmitRecovery = (values: loginValues) => {
-        // const resp = await fetch('http://localhost:3000/api/users/login', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         email: email,
-        //         password: password
-        //     })
-        // });
-        // const json = await resp.json();
         sleep(300).then(() => {
             window.alert(JSON.stringify(values, null, 2));
         });
@@ -86,10 +75,12 @@ const RecoveryPassword = () => {
 
     const bgColor = "#48aee3"
 
+    const MailIcon = <CFaRegEnvelope color="gray.300" />
+
     return (
         <Flex
             flexDirection="column"
-            width="100wh"
+            width="100%"
             height="auto"
             pt="25px"
             pb="25px"
@@ -131,8 +122,10 @@ const RecoveryPassword = () => {
                                 >
                                     <InputLeftElement
                                         pointerEvents="none"
-                                        children={<CFaRegEnvelope color="gray.300" />}
-                                    />
+                                        // children={<CFaRegEnvelope color="gray.300" />}
+                                    >
+                                        <CFaRegEnvelope color="gray.300" />
+                                    </InputLeftElement>
                                     <Input
                                         id="emailInput"
                                         type="email"
@@ -147,7 +140,7 @@ const RecoveryPassword = () => {
                             <FormControl>
 
                                 <FormHelperText textAlign="left">
-                                    <Link href="/login">
+                                    <Link href="/login" passHref>
                                         <Flex direction="row" align="center" cursor="pointer">
                                             <CFaArrowLeft color="gray.300" ml="5px" mr="5px"/>
                                             Voltar para login
